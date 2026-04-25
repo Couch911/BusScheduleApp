@@ -1,0 +1,42 @@
+﻿<Window x:Class="BusScheduleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BusScheduleApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" x:Name="MainMenu" BorderThickness="1" Margin="5">
+            <MenuItem x:Name="FileMenuItem" Header="Файл">
+                <MenuItem x:Name="LoadDataMenuItem" Header="Завантажити" Click="LoadDataMenuItem_Click"/>
+                <MenuItem x:Name="SaveDataMenuItem" Header="Зберегти" Click="SaveDataMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="BusMenuItem" Header="Автобуси">
+                <MenuItem x:Name="EditDataMenuItem" Header="Редагувати"/>
+                <MenuItem x:Name="AddDataMenuItem" Header="Додати"/>
+            </MenuItem>
+            <MenuItem x:Name="SelectMenuItem" Header="Пошук">
+                <MenuItem Header="За пунктом призначення"/>
+                <MenuItem Header="За часом виїзду"/>
+            </MenuItem>
+            <MenuItem x:Name="AuthMenuItem" Header="Авторизація" Click="AuthMenuItem_Click"/>
+        </Menu>
+
+        <DataGrid Grid.Row="1" x:Name="BusListDG" AutoGenerateColumns="False" 
+              ItemsSource="{Binding}" Margin="5,30,20,10" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="Auto"/>
+                <DataGridTextColumn Header="Маршрут" Binding="{Binding routeNumber}" Width="Auto"/>
+                <DataGridTextColumn Header="Пункт призначення" Binding="{Binding destination}" Width="Auto"/>
+                <DataGridTextColumn Header="Час відправлення" Binding="{Binding departureTime}" Width="Auto"/>
+                <DataGridTextColumn Header="Вільних місць" Binding="{Binding freeSeats}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

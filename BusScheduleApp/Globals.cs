@@ -1,21 +1,22 @@
 ﻿namespace BusScheduleApp
 {
-    [cite_start]// Клас, який описує поля вашої таблиці в БД 
     public class BusTrip
     {
-        public int id { get; set; }
-        public string routeNumber { get; set; }
-        public string destination { get; set; }
-        public System.TimeSpan departureTime { get; set; }
-        public int freeSeats { get; set; }
+        public int reys_id { get; set; }
+        public string punkt_vidpravku { get; set; }
+        public string punkt_priznachennya { get; set; }
+        public int kiltist_mists_v_salonu { get; set; }
+        public System.DateTime vidpravku { get; set; } // Змінено тип
+        public System.DateTime pributtia { get; set; } // Змінено тип
 
-        public BusTrip(int idNum, string rN, string dest, System.TimeSpan dT, int fS)
+        public BusTrip(int id, string from, string to, int seats, System.DateTime dep, System.DateTime arr)
         {
-            this.id = idNum;
-            this.routeNumber = rN;
-            this.destination = dest;
-            this.departureTime = dT;
-            this.freeSeats = fS;
+            this.reys_id = id;
+            this.punkt_vidpravku = from;
+            this.punkt_priznachennya = to;
+            this.kiltist_mists_v_salonu = seats;
+            this.vidpravku = dep;
+            this.pributtia = arr;
         }
     }
 }

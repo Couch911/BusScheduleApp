@@ -26,14 +26,16 @@ namespace BusScheduleApp
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
+                        // Усередині методу OpenDbFile змініть частину з reader:
                         while (reader.Read())
                         {
                             bList.Add(new BusTrip(
-                                (int)reader["id"],
-                                reader["route_number"].ToString(),
-                                reader["destination"].ToString(),
-                                (TimeSpan)reader["departure_time"],
-                                (int)reader["free_seats"]
+                                (int)reader["reys_id"],
+                                reader["punkt_vidpravku"].ToString(),
+                                reader["punkt_priznachennya"].ToString(),
+                                (int)reader["kiltist_mists_v_salonu"],
+                                (System.DateTime)reader["vidpravku"],
+                                (System.DateTime)reader["pributtia"]
                             ));
                         }
                     }

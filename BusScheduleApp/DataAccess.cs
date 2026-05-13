@@ -1,4 +1,4 @@
-﻿using Npgsql; // Підключаємо драйвер PostgreSQL 
+﻿using Npgsql; 
 using System.Collections.Generic;
 using System;
 
@@ -6,8 +6,7 @@ namespace BusScheduleApp
 {
     public class DataAccess
     {
-        [cite_start]// Рядок з'єднання (пароль введіть свій) 
-        public string connStr = "Host=localhost; Username=postgres; Password=ВАШ_ПАРОЛЬ; Database=ROSKLADAVTOBUSIV";
+        public string connStr = "Host=localhost; Username=postgres; Password=1234; Database=ROSKLADAVTOBUSIV";
         public List<BusTrip> bList = new List<BusTrip>();
 
         public DataAccess()
@@ -22,11 +21,10 @@ namespace BusScheduleApp
                 using (var conn = new NpgsqlConnection(connStr))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM bus_schedule"; // Ваша таблиця 
+                    string sql = "SELECT * FROM bus_schedule";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     using (var reader = cmd.ExecuteReader())
                     {
-                        // Усередині методу OpenDbFile змініть частину з reader:
                         while (reader.Read())
                         {
                             bList.Add(new BusTrip(

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BusScheduleApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Інформація про рейси" Height="450" Width="800">
+        Title="Інформація про рейси" Height="500" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -11,11 +11,10 @@
         <Menu Grid.Row="0" x:Name="MainMenu" BorderThickness="1" Margin="5">
             <MenuItem x:Name="FileMenuItem" Header="Файл">
                 <MenuItem x:Name="LoadDataMenuItem" Header="Завантажити" Click="LoadDataMenuItem_Click"/>
-                <MenuItem x:Name="SaveDataMenuItem" Header="Зберегти" Click="SaveDataMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="BusMenuItem" Header="Автобуси">
-                <MenuItem x:Name="EditDataMenuItem" Header="Редагувати"/>
-                <MenuItem x:Name="AddDataMenuItem" Header="Додати"/>
+                <MenuItem x:Name="EditDataMenuItem" Header="Редагувати" Click="EditDataMenuItem_Click"/>
+                <MenuItem x:Name="AddDataMenuItem" Header="Додати" Click="AddDataMenuItem_Click"/>
             </MenuItem>
             <MenuItem x:Name="SelectMenuItem" Header="Пошук">
                 <MenuItem Header="За пунктом призначення"/>
@@ -24,15 +23,46 @@
             <MenuItem x:Name="AuthMenuItem" Header="Авторизація" Click="AuthMenuItem_Click"/>
         </Menu>
 
-        <DataGrid Grid.Row="1" x:Name="BusListDG" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="5,30,20,10">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding reys_id}" Width="50"/>
-                <DataGridTextColumn Header="Звідки" Binding="{Binding punkt_vidpravku}" Width="*"/>
-                <DataGridTextColumn Header="Куди" Binding="{Binding punkt_priznachennya}" Width="*"/>
-                <DataGridTextColumn Header="Місць" Binding="{Binding kiltist_mists_v_salonu}" Width="70"/>
-                <DataGridTextColumn Header="Відправлення" Binding="{Binding vidpravku, StringFormat=HH:mm}" Width="100"/>
-                <DataGridTextColumn Header="Прибуття" Binding="{Binding pributtia, StringFormat=HH:mm}" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Column="0" x:Name="BusListDG" AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="0,0,10,0" MouseDoubleClick="BusListDG_MouseDoubleClick" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding reys_id}" Width="40"/>
+                    <DataGridTextColumn Header="Звідки" Binding="{Binding punkt_vidpravku}" Width="*"/>
+                    <DataGridTextColumn Header="Куди" Binding="{Binding punkt_priznachennya}" Width="*"/>
+                    <DataGridTextColumn Header="Місць" Binding="{Binding kiltist_mists_v_salonu}" Width="50"/>
+                    <DataGridTextColumn Header="Відправлення" Binding="{Binding vidpravku, StringFormat=HH:mm}" Width="90"/>
+                    <DataGridTextColumn Header="Прибуття" Binding="{Binding pributtia, StringFormat=HH:mm}" Width="90"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <GroupBox Grid.Column="1" x:Name="flightGroupBox" Header="Дані рейсу" Visibility="Hidden">
+                <StackPanel Margin="5">
+                    <Label Content="ID рейсу:"/>
+                    <TextBox x:Name="idTextBox" IsEnabled="False" Margin="0,0,0,5"/>
+
+                    <Label Content="Звідки:"/>
+                    <TextBox x:Name="fromTextBox" Margin="0,0,0,5"/>
+
+                    <Label Content="Куди:"/>
+                    <TextBox x:Name="toTextBox" Margin="0,0,0,5"/>
+
+                    <Label Content="Кількість місць:"/>
+                    <TextBox x:Name="seatsTextBox" Margin="0,0,0,5"/>
+
+                    <Label Content="Відправлення (HH:mm):"/>
+                    <TextBox x:Name="depTextBox" Margin="0,0,0,5"/>
+
+                    <Label Content="Прибуття (HH:mm):"/>
+                    <TextBox x:Name="arrTextBox" Margin="0,0,0,5"/>
+
+                    <Button x:Name="saveBtn" Content="Зберегти" Margin="0,15,0,0" Height="30" Click="SaveBtn_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

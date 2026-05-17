@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BusScheduleApp.LogInForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Авторизація" Height="180" Width="280" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
+        Title="Авторизація" Height="240" Width="280" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <StackPanel Margin="20">
         <Label Content="Логін:"/>
         <TextBox x:Name="logTextBox" Margin="0,5"/>

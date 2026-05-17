@@ -1,11 +1,12 @@
-﻿using Npgsql; 
+﻿using System;
 using System.Collections.Generic;
-using System;
+using Npgsql; // Обов'язкова бібліотека для PostgreSQL
 
 namespace BusScheduleApp
 {
     public class DataAccess
     {
+        // Не забудьте вписати свій пароль від бази (наприклад, 1234)
         public string connStr = "Host=localhost; Username=postgres; Password=1234; Database=ROSKLADAVTOBUSIV";
         public List<BusTrip> bList = new List<BusTrip>();
 
@@ -14,34 +15,64 @@ namespace BusScheduleApp
             OpenDbFile();
         }
 
+        // Завантаження всіх рейсів із БД
         private void OpenDbFile()
         {
-            try
+            bList.Clear();
+            using (NpgsqlConnection conn = new NpgsqlConnection(connStr))
             {
-                using (var conn = new NpgsqlConnection(connStr))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM bus_schedule ORDER BY reys_id", conn))
                 {
-                    conn.Open();
-                    string sql = "SELECT * FROM bus_schedule";
-                    using (var cmd = new NpgsqlCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            bList.Add(new BusTrip(
-                                (int)reader["reys_id"],
-                                reader["punkt_vidpravku"].ToString(),
-                                reader["punkt_priznachennya"].ToString(),
-                                (int)reader["kiltist_mists_v_salonu"],
-                                (System.DateTime)reader["vidpravku"],
-                                (System.DateTime)reader["pributtia"]
-                            ));
+                            int id = reader.GetInt32(0);
+                            string from = reader.GetString(1);
+                            string to = reader.GetString(2);
+                            int seats = reader.GetInt32(3);
+                            DateTime dep = reader.GetDateTime(4);
+                            DateTime arr = reader.GetDateTime(5);
+
+                            bList.Add(new BusTrip(id, from, to, seats, dep, arr));
                         }
                     }
                 }
             }
-            catch (Exception ex)
+        }
+
+        // Метод збереження або оновлення рейсу в БД
+        public void SaveTripToDb(BusTrip trip, bool isAdding)
+        {
+            using (NpgsqlConnection conn = new NpgsqlConnection(connStr))
             {
-                System.Windows.MessageBox.Show("Помилка БД: " + ex.Message);
+                conn.Open();
+                string query = "";
+
+                if (isAdding)
+                {
+                    // Додавання нового рейсу
+                    query = "INSERT INTO bus_schedule (reys_id, punkt_vidpravku, punkt_priznachennya, kiltist_mists_v_salonu, vidpravku, pributtia) VALUES (@id, @from, @to, @seats, @dep, @arr)";
+                }
+                else
+                {
+                    // Оновлення існуючого рейсу
+                    query = "UPDATE bus_schedule SET punkt_vidpravku=@from, punkt_priznachennya=@to, kiltist_mists_v_salonu=@seats, vidpravku=@dep, pributtia=@arr WHERE reys_id=@id";
+                }
+
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                {
+                    // Безпечна передача параметрів
+                    cmd.Parameters.AddWithValue("id", trip.reys_id);
+                    cmd.Parameters.AddWithValue("from", trip.punkt_vidpravku);
+                    cmd.Parameters.AddWithValue("to", trip.punkt_priznachennya);
+                    cmd.Parameters.AddWithValue("seats", trip.kiltist_mists_v_salonu);
+                    cmd.Parameters.AddWithValue("dep", trip.vidpravku);
+                    cmd.Parameters.AddWithValue("arr", trip.pributtia);
+
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
     }
